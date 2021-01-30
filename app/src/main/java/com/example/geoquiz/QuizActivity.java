@@ -37,7 +37,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private List<Integer> mAnswerIndexesList = new ArrayList<>();
-    private int mPercentOfResults = 0;
+    private double mPercentOfResults = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
-            mPercentOfResults += (int) 100 / mQuestions.length;
+            mPercentOfResults += (double) 100 / mQuestions.length;
         } else {
             messageResId = R.string.incorrect_toast;
         }
@@ -132,7 +132,7 @@ public class QuizActivity extends AppCompatActivity {
         mAnswerIndexesList.add(mCurrentIndex);
 
         if(mAnswerIndexesList.size() == mQuestions.length){
-            Toast.makeText(QuizActivity.this, "You results: " + mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
+            Toast.makeText(QuizActivity.this, "You results: " + (int) mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
         }
     }
 
