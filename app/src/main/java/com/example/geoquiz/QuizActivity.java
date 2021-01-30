@@ -3,6 +3,7 @@ package com.example.geoquiz;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private TextView mQuestionTextView;
+    private Button mCheatButton;
 
     private final Question[] mQuestions = new Question[]{
             new Question(R.string.question_australia, true),
@@ -54,6 +56,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton = findViewById(R.id.false_button);
         ImageButton nextButton = findViewById(R.id.next_button);
         ImageButton prevButton = findViewById(R.id.prev_button);
+        mCheatButton = findViewById(R.id.cheat_button);
 
 
         updateQuestionScreen();
@@ -67,6 +70,12 @@ public class QuizActivity extends AppCompatActivity {
         prevButton.setOnClickListener(v -> moveToPrevQuestion());
 
         mQuestionTextView.setOnClickListener(v -> moveToNextQuestion());
+
+        mCheatButton.setOnClickListener(v -> {
+            boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
+            Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+            startActivity(intent);
+        });
     }
 
     @Override
