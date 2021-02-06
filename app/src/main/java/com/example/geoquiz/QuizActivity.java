@@ -123,17 +123,13 @@ public class QuizActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         int messageResId;
-        if(mIsCheater) {
+        if (mIsCheater) {
             messageResId = R.string.judgment_toast;
-        }
-
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct_toast;
-            mPercentOfResults += (double) 100 / mQuestions.length;
         } else {
+
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
-                mPercentOfResults += 100 / mQuestions.length;
+                mPercentOfResults += (double) 100 / mQuestions.length;
             } else {
                 messageResId = R.string.incorrect_toast;
             }
@@ -146,7 +142,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mAnswerIndexesList.add(mCurrentIndex);
 
-        if(mAnswerIndexesList.size() == mQuestions.length){
+        if (mAnswerIndexesList.size() == mQuestions.length) {
             Toast.makeText(QuizActivity.this, "You results: " + (int) mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
         }
     }
@@ -165,23 +161,24 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestionScreen();
     }
 
-    private void enableAnswerButtons(){
+    private void enableAnswerButtons() {
         mTrueButton.setEnabled(true);
         mFalseButton.setEnabled(true);
     }
 
-    private void disableAnswerButtons(){
+    private void disableAnswerButtons() {
         mTrueButton.setEnabled(false);
         mFalseButton.setEnabled(false);
     }
 
-    private void updateQuestionScreen(){
+    private void updateQuestionScreen() {
         updateQuestion();
-        if (mAnswerIndexesList.contains(mCurrentIndex)){
+        if (mAnswerIndexesList.contains(mCurrentIndex)) {
             disableAnswerButtons();
         } else {
             enableAnswerButtons();
         }
+        mIsCheater = false;
     }
 
     @Override
