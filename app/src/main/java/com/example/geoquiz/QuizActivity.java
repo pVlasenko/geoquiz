@@ -39,7 +39,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private List<Integer> mAnswerIndexesList = new ArrayList<>();
-    private final List<Integer> mCheatedAnswerIndexList = new ArrayList<>();
+    private List<Integer> mCheatedAnswerIndexList = new ArrayList<>();
     private double mPercentOfResults = 0;
 
     @Override
@@ -51,6 +51,7 @@ public class QuizActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             mAnswerIndexesList = savedInstanceState.getIntegerArrayList(INDEXES_LIST);
+            mCheatedAnswerIndexList = savedInstanceState.getIntegerArrayList(CHEATED_INDEX_LIST);
         }
         mQuestionTextView = findViewById(R.id.question_text_view);
         mTrueButton = findViewById(R.id.true_button);
