@@ -37,7 +37,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private List<Integer> mAnswerIndexesList = new ArrayList<>();
-    private int mPercentOfResults = 0;
+    private double mPercentOfResults = 0;
     private boolean mIsCheater;
 
     @Override
@@ -123,8 +123,13 @@ public class QuizActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         int messageResId;
-        if(mIsCheater){
+        if(mIsCheater) {
             messageResId = R.string.judgment_toast;
+        }
+
+        if (userPressedTrue == answerIsTrue) {
+            messageResId = R.string.correct_toast;
+            mPercentOfResults += (double) 100 / mQuestions.length;
         } else {
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
@@ -142,7 +147,7 @@ public class QuizActivity extends AppCompatActivity {
         mAnswerIndexesList.add(mCurrentIndex);
 
         if(mAnswerIndexesList.size() == mQuestions.length){
-            Toast.makeText(QuizActivity.this, "You results: " + mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
+            Toast.makeText(QuizActivity.this, "You results: " + (int) mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
         }
     }
 

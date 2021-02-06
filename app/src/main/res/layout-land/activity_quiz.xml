@@ -63,5 +63,4 @@
         android:contentDescription="@string/next_button"
         android:src="@drawable/arrow_right" />
 
-
 </FrameLayout>
