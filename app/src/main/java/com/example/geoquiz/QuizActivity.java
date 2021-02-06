@@ -39,9 +39,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private List<Integer> mAnswerIndexesList = new ArrayList<>();
-    private List<Integer> mCheatedAnswerIndexList = new ArrayList<>();
+    private final List<Integer> mCheatedAnswerIndexList = new ArrayList<>();
     private double mPercentOfResults = 0;
-    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +115,7 @@ public class QuizActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState()");
         outState.putInt(KEY_INDEX, mCurrentIndex);
         outState.putIntegerArrayList(INDEXES_LIST, (ArrayList<Integer>) mAnswerIndexesList);
+        outState.putIntegerArrayList(CHEATED_INDEX_LIST, (ArrayList<Integer>) mCheatedAnswerIndexList);
     }
 
     private void updateQuestion() {
@@ -196,8 +196,7 @@ public class QuizActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            mIsCheater = CheatActivity.wasAnswerShown(data);
-            if (mIsCheater){
+            if (CheatActivity.wasAnswerShown(data)){
                 mCheatedAnswerIndexList.add(mCurrentIndex);
             }
         }
