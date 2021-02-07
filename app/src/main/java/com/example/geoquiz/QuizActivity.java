@@ -20,11 +20,13 @@ public class QuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
     private static final String INDEXES_LIST = "indexesList";
+    private static final String CHEATED_INDEX_LIST = "cheatedIndexList";
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
     private TextView mQuestionTextView;
+    private Button mCheatButton;
 
     private final Question[] mQuestions = new Question[]{
             new Question(R.string.question_australia, true),
@@ -37,8 +39,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private List<Integer> mAnswerIndexesList = new ArrayList<>();
+    private List<Integer> mCheatedAnswerIndexList = new ArrayList<>();
     private double mPercentOfResults = 0;
-    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,14 @@ public class QuizActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             mAnswerIndexesList = savedInstanceState.getIntegerArrayList(INDEXES_LIST);
+            mCheatedAnswerIndexList = savedInstanceState.getIntegerArrayList(CHEATED_INDEX_LIST);
         }
         mQuestionTextView = findViewById(R.id.question_text_view);
         mTrueButton = findViewById(R.id.true_button);
         mFalseButton = findViewById(R.id.false_button);
         ImageButton nextButton = findViewById(R.id.next_button);
         ImageButton prevButton = findViewById(R.id.prev_button);
-        Button cheatButton = findViewById(R.id.cheat_button);
+        mCheatButton = findViewById(R.id.cheat_button);
 
 
         updateQuestionScreen();
@@ -70,7 +73,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mQuestionTextView.setOnClickListener(v -> moveToNextQuestion());
 
-        cheatButton.setOnClickListener(v -> {
+        mCheatButton.setOnClickListener(v -> {
             boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
             Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
             startActivityForResult(intent, REQUEST_CODE_CHEAT);
@@ -113,6 +116,7 @@ public class QuizActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState()");
         outState.putInt(KEY_INDEX, mCurrentIndex);
         outState.putIntegerArrayList(INDEXES_LIST, (ArrayList<Integer>) mAnswerIndexesList);
+        outState.putIntegerArrayList(CHEATED_INDEX_LIST, (ArrayList<Integer>) mCheatedAnswerIndexList);
     }
 
     private void updateQuestion() {
@@ -123,7 +127,7 @@ public class QuizActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         int messageResId;
-        if (mIsCheater) {
+        if (mCheatedAnswerIndexList.contains(mCurrentIndex)) {
             messageResId = R.string.judgment_toast;
         } else {
 
@@ -139,6 +143,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mTrueButton.setEnabled(false);
         mFalseButton.setEnabled(false);
+        mCheatButton.setEnabled(false);
 
         mAnswerIndexesList.add(mCurrentIndex);
 
@@ -149,7 +154,6 @@ public class QuizActivity extends AppCompatActivity {
 
     private void moveToNextQuestion() {
         mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
-        mIsCheater = false;
         updateQuestionScreen();
     }
 
@@ -164,11 +168,13 @@ public class QuizActivity extends AppCompatActivity {
     private void enableAnswerButtons() {
         mTrueButton.setEnabled(true);
         mFalseButton.setEnabled(true);
+        mCheatButton.setEnabled(true);
     }
 
     private void disableAnswerButtons() {
         mTrueButton.setEnabled(false);
         mFalseButton.setEnabled(false);
+        mCheatButton.setEnabled(false);
     }
 
     private void updateQuestionScreen() {
@@ -178,7 +184,6 @@ public class QuizActivity extends AppCompatActivity {
         } else {
             enableAnswerButtons();
         }
-        mIsCheater = false;
     }
 
     @Override
@@ -192,7 +197,9 @@ public class QuizActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            mIsCheater = CheatActivity.wasAnswerShown(data);
+            if (CheatActivity.wasAnswerShown(data)){
+                mCheatedAnswerIndexList.add(mCurrentIndex);
+            }
         }
     }
 }
