@@ -1,6 +1,7 @@
 package com.example.geoquiz;
 
 import android.content.Intent;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -27,6 +28,8 @@ public class QuizActivity extends AppCompatActivity {
     private Button mFalseButton;
     private TextView mQuestionTextView;
     private Button mCheatButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
 
     private final Question[] mQuestions = new Question[]{
             new Question(R.string.question_australia, true),
@@ -56,8 +59,8 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextView = findViewById(R.id.question_text_view);
         mTrueButton = findViewById(R.id.true_button);
         mFalseButton = findViewById(R.id.false_button);
-        ImageButton nextButton = findViewById(R.id.next_button);
-        ImageButton prevButton = findViewById(R.id.prev_button);
+        mNextButton = findViewById(R.id.next_button);
+        mPrevButton = findViewById(R.id.prev_button);
         mCheatButton = findViewById(R.id.cheat_button);
 
 
@@ -67,9 +70,9 @@ public class QuizActivity extends AppCompatActivity {
 
         mFalseButton.setOnClickListener(v -> checkAnswer(false));
 
-        nextButton.setOnClickListener(v -> moveToNextQuestion());
+        mNextButton.setOnClickListener(v -> moveToNextQuestion());
 
-        prevButton.setOnClickListener(v -> moveToPrevQuestion());
+        mPrevButton.setOnClickListener(v -> moveToPrevQuestion());
 
         mQuestionTextView.setOnClickListener(v -> moveToNextQuestion());
 
@@ -141,13 +144,15 @@ public class QuizActivity extends AppCompatActivity {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
 
-        mTrueButton.setEnabled(false);
-        mFalseButton.setEnabled(false);
-        mCheatButton.setEnabled(false);
+        disableAnswerButtons();
 
         mAnswerIndexesList.add(mCurrentIndex);
 
         if (mAnswerIndexesList.size() == mQuestions.length) {
+//            mNextButton.setBackgroundColor(0xFFD5D5D5);
+            mNextButton.setEnabled(false);
+//            mPrevButton.setBackgroundColor(0xFFD5D5D5);
+            mPrevButton.setEnabled(false);
             Toast.makeText(QuizActivity.this, "You results: " + (int) mPercentOfResults + "% of the correct answers", Toast.LENGTH_LONG).show();
         }
     }
@@ -166,14 +171,20 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void enableAnswerButtons() {
+        mTrueButton.setBackgroundColor(0xFF156C3C);
         mTrueButton.setEnabled(true);
+        mFalseButton.setBackgroundColor(0xFFA6071F);
         mFalseButton.setEnabled(true);
+        mCheatButton.setBackgroundColor(0xFFC19103);
         mCheatButton.setEnabled(true);
     }
 
     private void disableAnswerButtons() {
+        mTrueButton.setBackgroundColor(0xFFD5D5D5);
         mTrueButton.setEnabled(false);
+        mFalseButton.setBackgroundColor(0xFFD5D5D5);
         mFalseButton.setEnabled(false);
+        mCheatButton.setBackgroundColor(0xFFD5D5D5);
         mCheatButton.setEnabled(false);
     }
 
